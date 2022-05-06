@@ -10,6 +10,7 @@ The version headers in this history reflect the versions of Apollo Server itself
 ## vNEXT
 
 - Add a few missing dependencies to packages. [PR #6393](https://github.com/apollographql/apollo-server/pull/6393)
+- `apollo-server-core`: Fix usage reporting plugin "willResolveField called after stopTiming!" error caused by a race condition related to null bubbling. [Issue #4472](https://github.com/apollographql/apollo-server/issues/4472)
 
 ## v3.7.0
 
