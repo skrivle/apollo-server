@@ -144,19 +144,22 @@ const recommendedCsrfPreventionRequestHeaders = [
 export class ApolloServerBase<
   // The type of the argument to the `context` function for this integration.
   ContextFunctionParams = any,
+  ContextFunctionProducedContext = object,
 > {
   private logger: Logger;
   public graphqlPath: string = '/graphql';
   public requestOptions: Partial<GraphQLServerOptions<any>> =
     Object.create(null);
 
-  private context?: Context | ContextFunction<ContextFunctionParams>;
+  private context?:
+    | Context
+    | ContextFunction<ContextFunctionParams, ContextFunctionProducedContext>;
   private apolloConfig: ApolloConfig;
   protected plugins: ApolloServerPlugin[] = [];
   protected csrfPreventionRequestHeaders: string[] | null;
 
   private parseOptions: ParseOptions;
-  private config: Config<ContextFunctionParams>;
+  private config: Config<ContextFunctionParams, ContextFunctionProducedContext>;
   private state: ServerState;
   private toDispose = new Set<() => Promise<void>>();
   private toDisposeLast = new Set<() => Promise<void>>();
@@ -165,7 +168,9 @@ export class ApolloServerBase<
   private landingPage: LandingPage | null = null;
 
   // The constructor should be universal across all environments. All environment specific behavior should be set by adding or overriding methods
-  constructor(config: Config<ContextFunctionParams>) {
+  constructor(
+    config: Config<ContextFunctionParams, ContextFunctionProducedContext>,
+  ) {
     if (!config) throw new Error('ApolloServer requires options.');
     this.config = {
       ...config,

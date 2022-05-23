@@ -30,8 +30,8 @@ export type ContextFunction<FunctionParams = any, ProducedContext = object> = (
 // factory function that returns `ApolloServerPlugin`.
 export type PluginDefinition = ApolloServerPlugin | (() => ApolloServerPlugin);
 
-type BaseConfig = Pick<
-  GraphQLOptions<Context>,
+type BaseConfig<T> = Pick<
+  GraphQLOptions<Context<T>>,
   | 'formatError'
   | 'debug'
   | 'rootValue'
@@ -87,7 +87,10 @@ export type DocumentStore = KeyValueCache<DocumentNode>;
 
 // This configuration is shared between all integrations and should include
 // fields that are not specific to a single integration
-export interface Config<ContextFunctionParams = any> extends BaseConfig {
+export interface Config<
+  ContextFunctionParams = any,
+  ContextFunctionProducedContext = object,
+> extends BaseConfig<ContextFunctionProducedContext> {
   modules?: GraphQLSchemaModule[];
 
   // These three options are always only passed directly through to
